@@ -10,7 +10,7 @@ juce_add_plugin(Sixpander
 )
 
 target_sources(Sixpander
-    PRIVATE src/Sixpander.cpp src/SixpanderEditor.cpp
+    PRIVATE src/Sixpander.cpp src/SixpanderEditor.cpp src/MeterComponent.cpp
 )
 
 include_directories(Sixpander PRIVATE include)

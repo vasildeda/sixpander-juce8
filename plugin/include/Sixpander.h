@@ -1,11 +1,13 @@
 #pragma once
 
 #include <juce_audio_processors/juce_audio_processors.h>
+#include <atomic>
 
 using juce::AudioBuffer;
 using juce::AudioParameterFloat;
 using juce::AudioProcessor;
 using juce::AudioProcessorEditor;
+using juce::AudioProcessorValueTreeState;
 using juce::MemoryBlock;
 using juce::MidiBuffer;
 using juce::String;
@@ -31,10 +33,16 @@ public:
 
     void prepareToPlay(double, int) override { lowPassCoeff = 0.0f; sampleCountDown = 0; }
     void releaseResources() override {}
-    void processBlock(AudioBuffer<float>& buffer, MidiBuffer&) override {}
+    void processBlock(AudioBuffer<float>& buffer, MidiBuffer&) override;
 
-    void getStateInformation (MemoryBlock& destData) override {}
-    void setStateInformation (const void* data, int sizeInBytes) override {}
+    void getStateInformation (MemoryBlock& destData) override;
+    void setStateInformation (const void* data, int sizeInBytes) override;
+
+    AudioProcessorValueTreeState state;
+
+    const std::atomic<float>& getAudioInputLevel() const { return maxAudioInputLevel; }
+    const std::atomic<float>& getAudioSidechainLevel() const { return maxAudioSidechainLevel; }
+    const std::atomic<float>& getMidiInputLevel() const { return midiInputLevel; }
 
 private:    
     AudioParameterFloat* threshold;
@@ -42,6 +50,13 @@ private:
     int sampleCountDown;
 
     float lowPassCoeff;
+
+    std::atomic<float> audioInputLevel {0.0f};
+    std::atomic<float> audioSidechainLevel {0.0f};
+    std::atomic<float> midiInputLevel {0.0f};
+
+    std::atomic<float> maxAudioInputLevel { 0.0f };
+    std::atomic<float> maxAudioSidechainLevel { 0.0f };
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Sixpander)

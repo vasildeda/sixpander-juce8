@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <FILTERGRAPH>
-  <FILTER uid="25" x="0.33125" y="0.5663900414937759" useARA="0">
+  <FILTER uid="25" x="0.33125" y="0.5663900414937759" useARA="0" uiLastX_Normal="302"
+          uiLastY_Normal="408" uiopen_Normal="1">
     <PLUGIN name="Sixpander" format="VST3" category="Fx" manufacturer="Vasilovo"
             version="0.1.0" file="/Users/vasil/Library/Audio/Plug-Ins/VST3/Sixpander.vst3"
-            uniqueId="15d6a042" isInstrument="0" fileTime="1952d3d6716" infoUpdateTime="19534649152"
+            uniqueId="15d6a042" isInstrument="0" fileTime="19552791101" infoUpdateTime="195527942fa"
             numInputs="4" numOutputs="2" isShell="0" hasARAExtension="0"
             uid="3394e8a0"/>
-    <STATE>191.VMjLgXK....O+fWarAhckI2bo8la8HRLt.iHfTlai8FYo41Y8HRUTYTK3HxO9.BOVMEUy.Ea0cVZtMEcgQWY9vSRC8Vav8lak4Fc9XCLt3hKt3hKt3hKt3hYRUUSTEETIckVwTjQisVTTgkdEYjKAQjYPQSPWgUdMcjKAQjct3hdA4hKt3hKt3hKtnTUv.UQAslXuk0UXoWUFE0YQcEV77RRC8Vav8lak4Fc9vyKVMEUy.Ea0cVZtMEcgQWY9..</STATE>
+    <STATE>402.VMjLgjX....O+fWarAhckI2bo8la8HRLt.iHfTlai8FYo41Y8HRUTYTK3HxO9.BOVMEUy.Ea0cVZtMEcgQWY9vSRC8Vav8lak4Fc9HSL23hUMoFSmAURt3hKt7zJlcUXxEDZisVRxH1a3vVX3fjTLQmKogjYTwVXogiQY8FMwjENHIUUTkEUKMCR38TNtHzSPUjZTEDLTEEUUoFUSQyPOAUQpQUPvPDRuEkUOgFQrgjYXcEVxU0UYgCRBwDctjFR0MyPOAUQpQUPvPDRuEkUOgFRrgjYXcEVxU0UYgCRnwDctjFR0MyPOAUQpQUPvPDRuEkUOglXVg0azvFRlg0UXIWUWkENHITSz4RZHU2LC8TctTETRUDUSUTTUEkTMs1St3hKt3hKt3hKt3hKJUELPUTPqI1aYcEV5UkQQcVTWgkKDAkKBs1QhcVSxHlKDAkKC4BTG4hKt3hKt3hKt3FUUMTUDQEdqw1XmE0UYQTQFM1YAwyKIMzasA2atUlaz4COuX0TTMCTrU2Yo41TzEFck4C.</STATE>
     <LAYOUT>
       <INPUTS>
         <BUS index="0" layout="L R"/>
