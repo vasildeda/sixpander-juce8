@@ -1,6 +1,8 @@
 [submodule "libs/juce"]
 	path = libs/juce
 	url = https://github.com/juce-framework/JUCE.git
+	ignore = all
 [submodule "libs/pluginval"]
 	path = libs/pluginval
 	url = https://github.com/Tracktion/pluginval.git
+	ignore = all
