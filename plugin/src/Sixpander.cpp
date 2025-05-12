@@ -53,7 +53,7 @@ void Sixpander::processBlock(AudioBuffer<float>& buffer, MidiBuffer&)
 
     if (getBusCount(true) > 0)
     {
-        const auto& inputBuffer = getBusBuffer(buffer, true, 0); // Main input
+        auto inputBuffer = getBusBuffer(buffer, true, 0); // Main input
         for (int channel = 0; channel < inputBuffer.getNumChannels(); ++channel)
         {
             const float* data = inputBuffer.getReadPointer(channel);
@@ -70,7 +70,7 @@ void Sixpander::processBlock(AudioBuffer<float>& buffer, MidiBuffer&)
 
     if (getBusCount(true) > 1)
     {
-        const auto& sidechainBuffer = getBusBuffer(buffer, true, 1); // Sidechain input
+        auto sidechainBuffer = getBusBuffer(buffer, true, 1); // Sidechain input
         for (int channel = 0; channel < sidechainBuffer.getNumChannels(); ++channel)
         {
             const float* data = sidechainBuffer.getReadPointer(channel);
@@ -91,8 +91,22 @@ void Sixpander::processBlock(AudioBuffer<float>& buffer, MidiBuffer&)
     }
     if (audioSidechainLevel > maxAudioSidechainLevel) {
         maxAudioSidechainLevel.store(audioSidechainLevel);
-    }   
-    printf("Max RMS: %.2f %.2f\r", maxAudioInputLevel.load(), maxAudioSidechainLevel.load());
+    }
+
+    float gain = audioSidechainLevel / maxAudioSidechainLevel;
+
+    if (getBusCount(true) > 0 && getBusCount(false) > 0)
+    {
+        auto outputBuffer = getBusBuffer(buffer, false, 0);
+        for (int channel = 0; channel < outputBuffer.getNumChannels(); ++channel)
+        {
+            float* data = outputBuffer.getWritePointer(channel);
+            for (int sample = 0; sample < outputBuffer.getNumSamples(); ++sample)
+            {
+                data[sample] *= gain;
+            }
+        }
+    }
 }
 
 //==============================================================================
