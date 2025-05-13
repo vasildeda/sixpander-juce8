@@ -1,12 +1,11 @@
 #include "SixpanderEditor.h"
 
-using juce::jmin;
-
 //==============================================================================
 SixpanderEditor::SixpanderEditor(Sixpander& p):
     AudioProcessorEditor(&p),
     audioProcessor(p),
     gainAttachment(p.state, "gain", gainSlider),
+    modeAttachment(p.state, "mode", modeComboBox),
     audioInputMeter(p.getAudioInputLevel()),
     audioSidechainMeter(p.getAudioSidechainLevel()),
     midiInputMeter(p.getMidiInputLevel())
@@ -15,7 +14,11 @@ SixpanderEditor::SixpanderEditor(Sixpander& p):
     setSize(400, 300);
 
     addAndMakeVisible(gainSlider);
-    gainSlider.setSliderStyle(Slider::Rotary);
+    gainSlider.setSliderStyle(juce::Slider::Rotary);
+
+    addAndMakeVisible(modeComboBox);
+    modeComboBox.addItem("Max", 1);
+    modeComboBox.addItem("Target", 2);
 
     addAndMakeVisible(audioInputMeter);
     addAndMakeVisible(audioSidechainMeter);
@@ -47,9 +50,12 @@ void SixpanderEditor::resized()
     auto sliderArea = r.removeFromTop(60);
     gainSlider.setBounds(
         sliderArea.removeFromLeft(
-            jmin(180, sliderArea.getWidth() / 2)
+            juce::jmin(180, sliderArea.getWidth() / 2)
         )
     );
+    modeComboBox.setBounds(sliderArea.removeFromLeft(
+        juce::jmin(180, sliderArea.getWidth())
+    ));
 
     auto meterArea = r.removeFromTop(200);
     auto meterWidth = meterArea.getWidth() / 3;

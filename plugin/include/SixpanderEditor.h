@@ -3,9 +3,6 @@
 #include "Sixpander.h"
 #include "MeterComponent.h"
 
-using juce::AudioProcessorEditor;
-using juce::Slider;
-
 //==============================================================================
 class SixpanderEditor : public juce::AudioProcessorEditor, private juce::Timer
 {
@@ -21,8 +18,11 @@ private:
 
     Sixpander& audioProcessor;
 
-    Slider gainSlider;
-    AudioProcessorValueTreeState::SliderAttachment gainAttachment;
+    juce::Slider gainSlider;
+    juce::ComboBox modeComboBox;
+
+    juce::AudioProcessorValueTreeState::SliderAttachment gainAttachment;    
+    juce::AudioProcessorValueTreeState::ComboBoxAttachment modeAttachment;
 
     MeterComponent audioInputMeter;
     MeterComponent audioSidechainMeter;

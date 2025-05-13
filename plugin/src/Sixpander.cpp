@@ -1,31 +1,24 @@
 #include "Sixpander.h"
 #include "SixpanderEditor.h"
 
-using juce::AudioChannelSet;
-using juce::AudioParameterInt;
-using juce::NormalisableRange;
-using juce::ValueTree;
-
 Sixpander::Sixpander()
-: AudioProcessor(BusesProperties().withInput("Input",     AudioChannelSet::stereo())
-                                  .withOutput("Output",   AudioChannelSet::stereo())
-                                  .withInput("Sidechain", AudioChannelSet::stereo())),                                          
-state(*this, nullptr, "PARAMETERS", { std::make_unique<AudioParameterFloat> ("a", "Parameter A", NormalisableRange<float> (-100.0f, 100.0f), 0),
-                                      std::make_unique<AudioParameterInt>   ("gain", "Parameter B", 0, 5, 2) })
-{
-    addParameter(threshold = new AudioParameterFloat ({ "threshold", 1 }, "Threshold", 0.0f, 1.0f, 0.5f));
-    addParameter(alpha     = new AudioParameterFloat ({ "alpha",     1 }, "Alpha",     0.0f, 1.0f, 0.8f));
-}
+: AudioProcessor(BusesProperties().withInput("Input",     juce::AudioChannelSet::stereo())
+                                  .withOutput("Output",   juce::AudioChannelSet::stereo())
+                                  .withInput("Sidechain", juce::AudioChannelSet::stereo())),                                          
+state(*this, nullptr, "PARAMETERS", { std::make_unique<juce::AudioParameterFloat> ("a", "Parameter A", juce::NormalisableRange<float> (-100.0f, 100.0f), 0),
+                                      std::make_unique<juce::AudioParameterInt>   ("gain", "Parameter B", 0, 5, 2),
+                                      std::make_unique<juce::AudioParameterChoice>("mode", "Mode", juce::StringArray { "max", "target" }, 0) })
+{}
 
 Sixpander::~Sixpander()
 {}
 
-AudioProcessorEditor* Sixpander::createEditor()
+juce::AudioProcessorEditor* Sixpander::createEditor()
 {
     return new SixpanderEditor(*this);
 }
 
-void Sixpander::getStateInformation(MemoryBlock& destData)
+void Sixpander::getStateInformation(juce::MemoryBlock& destData)
 {
     std::cout << "getStateInformation" << std::endl;
     // Store an xml representation of our state.
@@ -41,12 +34,12 @@ void Sixpander::setStateInformation (const void* data, int sizeInBytes)
     // Restore our plug-in's state from the xml representation stored in the above
     // method.
     auto xmlState = getXmlFromBinary(data, sizeInBytes);
-    state.replaceState(ValueTree::fromXml (*xmlState));
+    state.replaceState(juce::ValueTree::fromXml (*xmlState));
 
     std::cout << xmlState->toString() << std::endl;
 }
 
-void Sixpander::processBlock(AudioBuffer<float>& buffer, MidiBuffer&)
+void Sixpander::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuffer&)
 {
     float inputSumSquares = 0.0f;
     int inputSamples = 0;
@@ -93,7 +86,24 @@ void Sixpander::processBlock(AudioBuffer<float>& buffer, MidiBuffer&)
         maxAudioSidechainLevel.store(audioSidechainLevel);
     }
 
-    float gain = audioSidechainLevel / maxAudioSidechainLevel;
+    const int mode = static_cast<int>(*state.getRawParameterValue("mode"));
+    const float gain = [&, mode]() -> float
+    {
+        switch (mode)
+        {
+            case 0: // "max"
+                std::cout << "MAX sidechain: " << audioSidechainLevel << " maxSidechain: " << maxAudioSidechainLevel << "\r";
+                return audioSidechainLevel / maxAudioSidechainLevel;
+
+            case 1: // "target"
+                std::cout << "TARGET sidechain: " << audioSidechainLevel << " input: " << audioInputLevel << "\r";
+                return audioSidechainLevel / audioInputLevel;
+
+            default:
+                std::cout << "DEFAULT            " << "\r";
+                return 1.0f;
+        }
+    }();
 
     if (getBusCount(true) > 0 && getBusCount(false) > 0)
     {
