@@ -1,5 +1,6 @@
 #pragma once
 
+#include "GainSmoother.h"
 #include <juce_audio_processors/juce_audio_processors.h>
 #include <atomic>
 
@@ -22,7 +23,7 @@ public:
     void changeProgramName (int, const juce::String&) override {}
     bool isVST2() const noexcept                               { return (wrapperType == wrapperType_VST); }
 
-    void prepareToPlay(double, int) override { lowPassCoeff = 0.0f; sampleCountDown = 0; }
+    void prepareToPlay(double, int) override;
     void releaseResources() override {}
     void processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuffer&) override;
 
@@ -35,17 +36,15 @@ public:
     const std::atomic<float>& getAudioSidechainLevel() const { return maxAudioSidechainLevel; }
     const std::atomic<float>& getMidiInputLevel() const { return midiInputLevel; }
 
-private:    
-    int sampleCountDown;
-
-    float lowPassCoeff;
-
+private:
     std::atomic<float> audioInputLevel {0.0f};
     std::atomic<float> audioSidechainLevel {0.0f};
     std::atomic<float> midiInputLevel {0.0f};
 
     std::atomic<float> maxAudioInputLevel { 0.0f };
     std::atomic<float> maxAudioSidechainLevel { 0.0f };
+
+    GainSmoother gainSmoother;
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Sixpander)

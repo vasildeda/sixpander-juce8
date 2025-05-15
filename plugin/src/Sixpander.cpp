@@ -39,6 +39,15 @@ void Sixpander::setStateInformation (const void* data, int sizeInBytes)
     std::cout << xmlState->toString() << std::endl;
 }
 
+void Sixpander::prepareToPlay(double sampleRate, int samplesPerBlock)
+{
+    std::cout << "prepareToPlay" << std::endl;
+    gainSmoother.setSampleRate(sampleRate);
+    gainSmoother.setAttackTime(0.01f);
+    gainSmoother.setReleaseTime(0.2f);
+    gainSmoother.reset();
+}
+
 void Sixpander::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuffer&)
 {
     float inputSumSquares = 0.0f;
@@ -105,6 +114,8 @@ void Sixpander::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuffer&
         }
     }();
 
+    float smoothedGain = gainSmoother.process(gain);
+
     if (getBusCount(true) > 0 && getBusCount(false) > 0)
     {
         auto outputBuffer = getBusBuffer(buffer, false, 0);
@@ -113,7 +124,7 @@ void Sixpander::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuffer&
             float* data = outputBuffer.getWritePointer(channel);
             for (int sample = 0; sample < outputBuffer.getNumSamples(); ++sample)
             {
-                data[sample] *= gain;
+                data[sample] *= smoothedGain;
             }
         }
     }
