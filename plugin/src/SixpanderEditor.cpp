@@ -5,10 +5,7 @@ SixpanderEditor::SixpanderEditor(Sixpander& p):
     AudioProcessorEditor(&p),
     audioProcessor(p),
     gainAttachment(p.state, "gain", gainSlider),
-    modeAttachment(p.state, "mode", modeComboBox),
-    audioInputMeter(p.getAudioInputLevel()),
-    audioSidechainMeter(p.getAudioSidechainLevel()),
-    midiInputMeter(p.getMidiInputLevel())
+    modeAttachment(p.state, "mode", modeComboBox)
 {
     // Set the size of the plugin editor window
     setSize(400, 300);
@@ -67,5 +64,7 @@ void SixpanderEditor::resized()
 
 void SixpanderEditor::timerCallback()
 {
-    repaint();  // This triggers the repaint and updates the UI with the latest values
+    audioInputMeter.pushLevel(audioProcessor.getAudioInputLevel());
+    audioSidechainMeter.pushLevel(audioProcessor.getAudioSidechainLevel());
+    repaint();
 }

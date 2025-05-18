@@ -6,14 +6,23 @@
 class MeterComponent : public juce::Component
 {
 public:
-    MeterComponent(const std::atomic<float>& rmsRef);
+    MeterComponent() = default;
     ~MeterComponent() override = default;
 
     void paint(juce::Graphics& g) override;
     void resized() override {}
 
+    void pushLevel(float level)
+    {
+        levels.push_back(juce::jlimit(0.0f, 1.0f, level));
+        if (levels.size() > 60)
+        {
+            levels.pop_front();
+        }
+    }
+
 private:
-    const std::atomic<float>& rmsLevel;
+    std::deque<float> levels;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MeterComponent)
 };

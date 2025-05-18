@@ -1,18 +1,29 @@
 #include "MeterComponent.h"
 
-MeterComponent::MeterComponent(const std::atomic<float>& rmsRef)
-    : rmsLevel(rmsRef)
-{
-}
+#include "DebugUtils.h"
+
+#include <juce_core/juce_core.h>
 
 void MeterComponent::paint(juce::Graphics& g)
 {
     auto bounds = getLocalBounds().toFloat();
     g.fillAll(juce::Colours::black);
 
-    float level = juce::jlimit(0.0f, 1.0f, rmsLevel.load());
-    float meterHeight = bounds.getHeight() * level;
+        // Draw historical bars with fading color
+    auto meterWidth = bounds.getWidth();
+    auto meterHeight = bounds.getHeight();
 
-    g.setColour(juce::Colours::limegreen);
-    g.fillRect(bounds.removeFromBottom(meterHeight));
+    for (size_t i = 0; i < levels.size(); ++i)
+    {
+        float histLevel = levels[i];
+        float height = meterHeight * histLevel;
+
+        float alpha = juce::jmap((float)i, 0.0f, (float)(levels.size() - 1), 0.2f, 1.0f);
+        g.setColour(juce::Colours::limegreen.withAlpha(alpha));
+
+        juce::Rectangle<float> bar = bounds.withY(meterHeight - height).withHeight(height);
+        g.drawRect(bar);
+    }
+
+//    printf("MeterComponent::paint: %d     \r", levels.size());
 }

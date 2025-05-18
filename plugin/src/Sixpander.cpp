@@ -101,15 +101,15 @@ void Sixpander::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuffer&
         switch (mode)
         {
             case 0: // "max"
-                std::cout << "MAX sidechain: " << audioSidechainLevel << " maxSidechain: " << maxAudioSidechainLevel << "\r";
+//                std::cout << "MAX sidechain: " << audioSidechainLevel << " maxSidechain: " << maxAudioSidechainLevel << "\r";
                 return audioSidechainLevel / maxAudioSidechainLevel;
 
             case 1: // "target"
-                std::cout << "TARGET sidechain: " << audioSidechainLevel << " input: " << audioInputLevel << "\r";
+  //              std::cout << "TARGET sidechain: " << audioSidechainLevel << " input: " << audioInputLevel << "\r";
                 return audioSidechainLevel / audioInputLevel;
 
             default:
-                std::cout << "DEFAULT            " << "\r";
+//                std::cout << "DEFAULT            " << "\r";
                 return 1.0f;
         }
     }();
