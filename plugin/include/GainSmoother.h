@@ -9,7 +9,7 @@ public:
 
     void setSampleRate(double sampleRate)
     {
-        sr = sampleRate;
+        sr = static_cast<float>(sampleRate);
         updateCoefficients();
     }
 
@@ -42,13 +42,13 @@ public:
 private:
     void updateCoefficients()
     {
-        attackCoeff  = std::exp(-1.0f / (attackTime  * sr));
-        releaseCoeff = std::exp(-1.0f / (releaseTime * sr));
+        attackCoeff  = std::expf(-1.0f / (attackTime  * sr));
+        releaseCoeff = std::expf(-1.0f / (releaseTime * sr));
     }
 
     float attackTime  = 0.01f;  // seconds
     float releaseTime = 0.1f;   // seconds
-    double sr = 44100.0;
+    float sr = 44100.0;
 
     float attackCoeff = 0.0f;
     float releaseCoeff = 0.0f;

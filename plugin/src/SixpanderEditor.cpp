@@ -5,7 +5,11 @@ SixpanderEditor::SixpanderEditor(Sixpander& p):
     AudioProcessorEditor(&p),
     audioProcessor(p),
     gainAttachment(p.state, "gain", gainSlider),
-    modeAttachment(p.state, "mode", modeComboBox)
+    modeAttachment(p.state, "mode", modeComboBox),
+    audioInputMeter(TIMER_FREQ),
+    audioSidechainMeter(TIMER_FREQ),
+    audioGainMeter(TIMER_FREQ),
+    audioOutputMeter(TIMER_FREQ)
 {
     // Set the size of the plugin editor window
     setSize(400, 300);
@@ -19,9 +23,10 @@ SixpanderEditor::SixpanderEditor(Sixpander& p):
 
     addAndMakeVisible(audioInputMeter);
     addAndMakeVisible(audioSidechainMeter);
-    addAndMakeVisible(midiInputMeter);
+    addAndMakeVisible(audioGainMeter);
+    addAndMakeVisible(audioOutputMeter);
 
-    startTimerHz(30);  // Start the timer to trigger every 30ms
+    startTimerHz(TIMER_FREQ);  // Start the timer to trigger every 30ms
 }
 
 SixpanderEditor::~SixpanderEditor()
@@ -55,16 +60,20 @@ void SixpanderEditor::resized()
     ));
 
     auto meterArea = r.removeFromTop(200);
-    auto meterWidth = meterArea.getWidth() / 3;
+    auto meterWidth = meterArea.getWidth() / 4;
 
     audioInputMeter.setBounds(meterArea.removeFromLeft(meterWidth));
     audioSidechainMeter.setBounds(meterArea.removeFromLeft(meterWidth));
-    midiInputMeter.setBounds(meterArea);
+    audioGainMeter.setBounds(meterArea.removeFromLeft(meterWidth));
+    audioOutputMeter.setBounds(meterArea);
 }
 
 void SixpanderEditor::timerCallback()
 {
     audioInputMeter.pushLevel(audioProcessor.getAudioInputLevel());
     audioSidechainMeter.pushLevel(audioProcessor.getAudioSidechainLevel());
+    audioGainMeter.pushLevel(audioProcessor.getAudioGainLevel());
+    audioOutputMeter.pushLevel(audioProcessor.getAudioOutputLevel());
+    
     repaint();
 }

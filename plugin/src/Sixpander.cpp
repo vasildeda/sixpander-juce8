@@ -41,7 +41,6 @@ void Sixpander::setStateInformation (const void* data, int sizeInBytes)
 
 void Sixpander::prepareToPlay(double sampleRate, int samplesPerBlock)
 {
-    std::cout << "prepareToPlay" << std::endl;
     gainSmoother.setSampleRate(sampleRate);
     gainSmoother.setAttackTime(0.01f);
     gainSmoother.setReleaseTime(0.2f);
@@ -84,8 +83,8 @@ void Sixpander::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuffer&
         sidechainSamples = sidechainBuffer.getNumSamples() * sidechainBuffer.getNumChannels();
     }
 
-    audioInputLevel = inputSamples > 0 ? std::sqrt(inputSumSquares / inputSamples) : 1.0f;
-    audioSidechainLevel = sidechainSamples > 0 ? std::sqrt(sidechainSumSquares / sidechainSamples) : 0.0f;
+    audioInputLevel.store(inputSamples > 0 ? std::sqrt(inputSumSquares / inputSamples) : 1.0f);
+    audioSidechainLevel.store(sidechainSamples > 0 ? std::sqrt(sidechainSumSquares / sidechainSamples) : 0.0f);
     midiInputLevel = 0.0f;
 
     if (audioInputLevel > maxAudioInputLevel) {
@@ -115,6 +114,10 @@ void Sixpander::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuffer&
     }();
 
     float smoothedGain = gainSmoother.process(gain);
+    audioGainLevel.store(smoothedGain);
+
+    float outputSumSquares = 0.0f;
+    int outputSamples = 0;
 
     if (getBusCount(true) > 0 && getBusCount(false) > 0)
     {
@@ -125,9 +128,13 @@ void Sixpander::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuffer&
             for (int sample = 0; sample < outputBuffer.getNumSamples(); ++sample)
             {
                 data[sample] *= smoothedGain;
+                outputSumSquares += data[sample] * data[sample];
             }
         }
+
+        outputSamples = outputBuffer.getNumSamples() * outputBuffer.getNumChannels();
     }
+    audioOutputLevel.store(outputSamples > 0 ? std::sqrt(outputSumSquares / outputSamples) : 1.0f);
 }
 
 //==============================================================================

@@ -4,13 +4,27 @@
 
 #include <juce_core/juce_core.h>
 
+MeterComponent::MeterComponent(int frequency):
+    frequency(frequency)
+{
+    // Set the size of the component
+    setSize(200, 200);
+
+    // Set up the levels deque with a fixed size
+    levels.resize(30);
+
+    // Set up the smoother
+    smoother.setSampleRate(frequency);
+    smoother.setAttackTime(0.01f);
+    smoother.setReleaseTime(0.1f);
+    smoother.reset(0.0f);
+}
+
 void MeterComponent::paint(juce::Graphics& g)
 {
-    auto bounds = getLocalBounds().toFloat();
     g.fillAll(juce::Colours::black);
 
-        // Draw historical bars with fading color
-    auto meterWidth = bounds.getWidth();
+    auto bounds = getLocalBounds().toFloat();
     auto meterHeight = bounds.getHeight();
 
     for (size_t i = 0; i < levels.size(); ++i)
@@ -22,8 +36,20 @@ void MeterComponent::paint(juce::Graphics& g)
         g.setColour(juce::Colours::limegreen.withAlpha(alpha));
 
         juce::Rectangle<float> bar = bounds.withY(meterHeight - height).withHeight(height);
-        g.drawRect(bar);
+        g.fillRect(bar);
     }
 
+    if (!levels.empty())
+    {
+        auto smoothed = smoother.process(levels.back());
+
+        g.drawText(
+            juce::String(smoothed, 2),
+            bounds,
+            juce::Justification::centred,
+            true
+        );
+
+    }
 //    printf("MeterComponent::paint: %d     \r", levels.size());
 }

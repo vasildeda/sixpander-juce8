@@ -32,14 +32,18 @@ public:
 
     juce::AudioProcessorValueTreeState state;
 
-    float getAudioInputLevel() const { return maxAudioInputLevel.load(); }
-    float getAudioSidechainLevel() const { return maxAudioSidechainLevel.load(); }
+    float getAudioInputLevel() const { return audioInputLevel.load(); }
+    float getAudioSidechainLevel() const { return audioSidechainLevel.load(); }
     float getMidiInputLevel() const { return midiInputLevel.load(); }
+    float getAudioGainLevel() const { return audioGainLevel.load(); }
+    float getAudioOutputLevel() const { return audioOutputLevel.load(); }
 
 private:
     std::atomic<float> audioInputLevel {0.0f};
     std::atomic<float> audioSidechainLevel {0.0f};
     std::atomic<float> midiInputLevel {0.0f};
+    std::atomic<float> audioGainLevel {0.0f};
+    std::atomic<float> audioOutputLevel {0.0f};
 
     std::atomic<float> maxAudioInputLevel {0.0f};
     std::atomic<float> maxAudioSidechainLevel {0.0f};

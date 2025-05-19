@@ -14,6 +14,8 @@ public:
     void resized() override;
 
 private:
+    static constexpr int TIMER_FREQ = 30;
+
     void timerCallback() override;
 
     Sixpander& audioProcessor;
@@ -26,7 +28,8 @@ private:
 
     MeterComponent audioInputMeter;
     MeterComponent audioSidechainMeter;
-    MeterComponent midiInputMeter;
+    MeterComponent audioGainMeter;
+    MeterComponent audioOutputMeter;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SixpanderEditor)
 };
