@@ -4,7 +4,7 @@
 Sixpander::Sixpander()
 : AudioProcessor(BusesProperties().withInput("Input",     juce::AudioChannelSet::stereo())
                                   .withOutput("Output",   juce::AudioChannelSet::stereo())
-                                  .withInput("Sidechain", juce::AudioChannelSet::stereo())),                                          
+                                  .withInput("Sidechain", juce::AudioChannelSet::mono())),                                          
 state(*this, nullptr, "PARAMETERS", { std::make_unique<juce::AudioParameterFloat> ("a", "Parameter A", juce::NormalisableRange<float> (-100.0f, 100.0f), 0),
                                       std::make_unique<juce::AudioParameterInt>   ("gain", "Parameter B", 0, 5, 2),
                                       std::make_unique<juce::AudioParameterChoice>("mode", "Mode", juce::StringArray { "max", "target" }, 0) })
