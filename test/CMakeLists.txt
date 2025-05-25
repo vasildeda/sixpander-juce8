@@ -1,0 +1,3 @@
+add_executable(TestGainSmoother TestGainSmoother.cpp)
+target_include_directories(TestGainSmoother PRIVATE ${PROJECT_SOURCE_DIR}/plugin/include)
+add_test(NAME TestGainSmoother COMMAND TestGainSmoother)
