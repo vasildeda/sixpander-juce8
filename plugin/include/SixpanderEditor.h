@@ -23,8 +23,8 @@ private:
     juce::Slider gainSlider;
     juce::ComboBox modeComboBox;
 
-    juce::AudioProcessorValueTreeState::SliderAttachment gainAttachment;    
-    juce::AudioProcessorValueTreeState::ComboBoxAttachment modeAttachment;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> gainAttachment;    
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> modeAttachment;
 
     MeterComponent audioInputMeter;
     MeterComponent audioSidechainMeter;

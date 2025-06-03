@@ -4,8 +4,6 @@
 SixpanderEditor::SixpanderEditor(Sixpander& p):
     AudioProcessorEditor(&p),
     audioProcessor(p),
-    gainAttachment(p.state, "gain", gainSlider),
-    modeAttachment(p.state, "mode", modeComboBox),
     audioInputMeter(TIMER_FREQ),
     audioSidechainMeter(TIMER_FREQ),
     audioGainMeter(TIMER_FREQ),
@@ -20,6 +18,9 @@ SixpanderEditor::SixpanderEditor(Sixpander& p):
     addAndMakeVisible(modeComboBox);
     modeComboBox.addItem("Max", 1);
     modeComboBox.addItem("Target", 2);
+
+    gainAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(p.state, "gain", gainSlider);
+    modeAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(p.state, "mode", modeComboBox);
 
     addAndMakeVisible(audioInputMeter);
     addAndMakeVisible(audioSidechainMeter);
