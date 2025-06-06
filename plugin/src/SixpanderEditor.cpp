@@ -80,7 +80,7 @@ void SixpanderEditor::resized()
     auto r = getLocalBounds();
     r.removeFromTop(168);
 
-    auto sliderArea = r.removeFromTop(124);
+    auto sliderArea = r.removeFromTop(134);
     sliderArea.removeFromLeft(38);
     
     attackKnob.setBounds(sliderArea.removeFromLeft(124));
