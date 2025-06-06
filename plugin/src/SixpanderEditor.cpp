@@ -10,7 +10,18 @@ SixpanderEditor::SixpanderEditor(Sixpander& p):
     audioOutputMeter(TIMER_FREQ)
 {
     // Set the size of the plugin editor window
-    setSize(400, 300);
+    setSize(800, 600);
+
+    // Load the background SVG
+    auto svgFile = juce::File::getCurrentWorkingDirectory()
+        .getChildFile("plugin")
+        .getChildFile("assets")
+        .getChildFile("background.svg");
+    
+    if (svgFile.existsAsFile())
+    {
+        backgroundDrawable = juce::Drawable::createFromSVGFile(svgFile);
+    }
 
     addAndMakeVisible(gainSlider);
     gainSlider.setSliderStyle(juce::Slider::Rotary);
@@ -37,8 +48,17 @@ SixpanderEditor::~SixpanderEditor()
 //==============================================================================
 void SixpanderEditor::paint(juce::Graphics& g)
 {
-    // Fill the background with a solid colour
-    g.fillAll(juce::Colours::black);
+    // Draw the background SVG if available
+    if (backgroundDrawable != nullptr)
+    {
+        backgroundDrawable->drawWithin(g, getLocalBounds().toFloat(),
+                                     juce::RectanglePlacement::stretchToFit, 1.0f);
+    }
+    else
+    {
+        // Fallback to solid color if SVG is not available
+        g.fillAll(juce::Colours::black);
+    }
 
     // Set the font size and draw some text
     g.setColour(juce::Colours::white);
@@ -49,6 +69,7 @@ void SixpanderEditor::paint(juce::Graphics& g)
 void SixpanderEditor::resized()
 {
     auto r = getLocalBounds().reduced(8);
+    r.removeFromTop(200);
 
     auto sliderArea = r.removeFromTop(60);
     gainSlider.setBounds(

@@ -15,6 +15,9 @@ target_sources(Sixpander
 
 include_directories(Sixpander PRIVATE include)
 
+# Copy assets directory to build directory
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/assets DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+
 target_link_libraries(Sixpander
     PRIVATE
         juce::juce_audio_utils

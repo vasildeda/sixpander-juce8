@@ -2,6 +2,7 @@
 
 #include "Sixpander.h"
 #include "MeterComponent.h"
+#include <juce_gui_basics/juce_gui_basics.h>
 
 //==============================================================================
 class SixpanderEditor : public juce::AudioProcessorEditor, private juce::Timer
@@ -30,6 +31,8 @@ private:
     MeterComponent audioSidechainMeter;
     MeterComponent audioGainMeter;
     MeterComponent audioOutputMeter;
+
+    std::unique_ptr<juce::Drawable> backgroundDrawable;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SixpanderEditor)
 };
