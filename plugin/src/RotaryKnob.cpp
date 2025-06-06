@@ -28,7 +28,7 @@ void RotaryKnob::paint(juce::Graphics& g)
     if (knobDrawable != nullptr)
     {
         // Calculate rotation angle based on slider value (0-300 degrees)
-        rotationAngle = getValue() / 100.0f * 300.0f;
+        rotationAngle = getValue() / 100.0f * 326.0f;
         
         // Save the current graphics state
         g.saveState();
