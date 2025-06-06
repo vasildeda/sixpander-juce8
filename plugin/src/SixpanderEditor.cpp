@@ -37,20 +37,7 @@ SixpanderEditor::SixpanderEditor(Sixpander& p):
     addAndMakeVisible(modeComboBox);
     modeComboBox.addItem("Max", 1);
     modeComboBox.addItem("Target", 2);
-    
-    // Make the ComboBox transparent and borderless
-    modeComboBox.setColour(juce::ComboBox::backgroundColourId, juce::Colours::transparentBlack);
-    modeComboBox.setColour(juce::ComboBox::outlineColourId, juce::Colours::transparentBlack);
-    modeComboBox.setColour(juce::ComboBox::buttonColourId, juce::Colours::transparentBlack);
-    modeComboBox.setColour(juce::ComboBox::arrowColourId, juce::Colours::black);
-    modeComboBox.setColour(juce::ComboBox::textColourId, juce::Colours::black);
-
-    // Customize the popup menu appearance
-    auto& lf = modeComboBox.getLookAndFeel();
-    lf.setColour(juce::PopupMenu::backgroundColourId, juce::Colours::transparentBlack);
-    lf.setColour(juce::PopupMenu::textColourId, juce::Colours::black);
-    lf.setColour(juce::PopupMenu::highlightedBackgroundColourId, juce::Colours::black);
-    lf.setColour(juce::PopupMenu::highlightedTextColourId, juce::Colours::white);
+    modeComboBox.setLookAndFeel(&customLookAndFeel);
 
     attackAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(p.state, "attack", attackKnob);
     decayAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(p.state, "decay", decayKnob);

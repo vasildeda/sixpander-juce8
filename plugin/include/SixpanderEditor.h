@@ -3,6 +3,7 @@
 #include "Sixpander.h"
 #include "MeterComponent.h"
 #include "RotaryKnob.h"
+#include "CustomLookAndFeel.h"
 #include <juce_gui_basics/juce_gui_basics.h>
 
 //==============================================================================
@@ -21,6 +22,7 @@ private:
     void timerCallback() override;
 
     Sixpander& audioProcessor;
+    CustomLookAndFeel customLookAndFeel;
 
     RotaryKnob attackKnob;
     RotaryKnob decayKnob;
