@@ -32,23 +32,23 @@ public:
 
     juce::AudioProcessorValueTreeState state;
 
-    float getAudioInputLevel() const { return audioInputLevel.load(); }
-    float getAudioSidechainLevel() const { return audioSidechainLevel.load(); }
-    float getMidiInputLevel() const { return midiInputLevel.load(); }
-    float getAudioGainLevel() const { return audioGainLevel.load(); }
-    float getAudioOutputLevel() const { return audioOutputLevel.load(); }
+    float getAudioInputLevel() const { return audioInputLevel_.load(); }
+    float getAudioSidechainLevel() const { return audioSidechainLevel_.load(); }
+    float getMidiInputLevel() const { return midiInputLevel_.load(); }
+    float getAudioGainLevel() const { return audioGainLevel_.load(); }
+    float getAudioOutputLevel() const { return audioOutputLevel_.load(); }
 
 private:
-    std::atomic<float> audioInputLevel {0.0f};
-    std::atomic<float> audioSidechainLevel {0.0f};
-    std::atomic<float> midiInputLevel {0.0f};
-    std::atomic<float> audioGainLevel {0.0f};
-    std::atomic<float> audioOutputLevel {0.0f};
+    std::atomic<float> audioInputLevel_ {0.0f};
+    std::atomic<float> audioSidechainLevel_ {0.0f};
+    std::atomic<float> midiInputLevel_ {0.0f};
+    std::atomic<float> audioGainLevel_ {0.0f};
+    std::atomic<float> audioOutputLevel_ {0.0f};
 
-    std::atomic<float> maxAudioInputLevel {0.0f};
-    std::atomic<float> maxAudioSidechainLevel {0.0f};
+    std::atomic<float> maxAudioInputLevel_ {0.0f};
+    std::atomic<float> maxAudioSidechainLevel_ {0.0f};
 
-    GainSmoother gainSmoother;
+    GainSmoother gainSmoother_;
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Sixpander)

@@ -15,7 +15,7 @@ RotaryKnob::RotaryKnob()
     
     if (knobSvg.existsAsFile())
     {
-        knobDrawable = juce::Drawable::createFromSVGFile(knobSvg);
+        knobDrawable_ = juce::Drawable::createFromSVGFile(knobSvg);
     }
 }
 
@@ -25,10 +25,10 @@ RotaryKnob::~RotaryKnob()
 
 void RotaryKnob::paint(juce::Graphics& g)
 {
-    if (knobDrawable != nullptr)
+    if (knobDrawable_ != nullptr)
     {
         // Calculate rotation angle based on slider value (0-300 degrees)
-        rotationAngle = getValue() / 100.0f * 326.0f;
+        rotationAngle_ = getValue() / 100.0f * 326.0f;
         
         // Save the current graphics state
         g.saveState();
@@ -49,7 +49,7 @@ void RotaryKnob::paint(juce::Graphics& g)
         float centerX = getWidth() / 2.0f;
         float centerY = getHeight() / 2.0f;
 
-        if (debug)
+        if (debug_)
         {
             // Draw debug crosshair at component center
             g.setColour(juce::Colours::red);
@@ -66,13 +66,13 @@ void RotaryKnob::paint(juce::Graphics& g)
 
         // Apply rotation around the center of the circle
         g.addTransform(juce::AffineTransform::rotation(
-            juce::degreesToRadians(rotationAngle),
+            juce::degreesToRadians(rotationAngle_),
             centerOffsetX - pathWidth/2,  // X offset from path center
             centerOffsetY - pathHeight/2  // Y offset from path center
         ));
         
         // Draw the knob maintaining original proportions
-        knobDrawable->drawWithin(g, 
+        knobDrawable_->drawWithin(g, 
             juce::Rectangle<float>(-pathWidth/2, -pathHeight/2, pathWidth, pathHeight).toFloat(),
             juce::RectanglePlacement::centred, 1.0f);
         

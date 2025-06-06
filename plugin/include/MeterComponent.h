@@ -7,7 +7,7 @@
 class MeterComponent : public juce::Component
 {
 public:
-    MeterComponent(int frequnecy);
+    MeterComponent(int frequency);
     ~MeterComponent() override = default;
 
     void paint(juce::Graphics& g) override;
@@ -15,19 +15,19 @@ public:
 
     void pushLevel(float level)
     {
-        levels.push_back(juce::jlimit(0.0f, 1.0f, level));
-        if (levels.size() > 30)
+        levels_.push_back(juce::jlimit(0.0f, 1.0f, level));
+        if (levels_.size() > 30)
         {
-            levels.pop_front();
+            levels_.pop_front();
         }
     }
 
 private:
-    int frequency;
+    int frequency_;
     
-    std::deque<float> levels;
+    std::deque<float> levels_;
 
-    GainSmoother smoother;
+    GainSmoother smoother_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MeterComponent)
 };
