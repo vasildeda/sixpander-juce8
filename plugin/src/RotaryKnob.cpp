@@ -78,6 +78,12 @@ void RotaryKnob::paint(juce::Graphics& g)
         
         // Restore the graphics state
         g.restoreState();
+
+        // Draw the value text
+        g.setColour(juce::Colours::black);
+        g.setFont(15.0f);
+        auto valueText = juce::String(getValue(), 0) + getTextValueSuffix(); // Use the slider's built-in suffix
+        g.drawText(valueText, getLocalBounds(), juce::Justification::centred, true);
     }
 }
 
