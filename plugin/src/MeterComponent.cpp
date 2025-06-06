@@ -22,18 +22,16 @@ MeterComponent::MeterComponent(int frequency):
 
 void MeterComponent::paint(juce::Graphics& g)
 {
-    g.fillAll(juce::Colours::black);
-
-    auto bounds = getLocalBounds().toFloat();
+    auto bounds = getLocalBounds().toFloat().reduced(10, 5);
     auto meterHeight = bounds.getHeight();
-
+    
     for (size_t i = 0; i < levels_.size(); ++i)
     {
         float histLevel = levels_[i];
         float height = meterHeight * histLevel;
 
         float alpha = juce::jmap((float)i, 0.0f, (float)(levels_.size() - 1), 0.2f, 1.0f);
-        g.setColour(juce::Colours::limegreen.withAlpha(alpha));
+        g.setColour(juce::Colours::black.withAlpha(alpha));
 
         juce::Rectangle<float> bar = bounds.withY(meterHeight - height).withHeight(height);
         g.fillRect(bar);
@@ -43,6 +41,7 @@ void MeterComponent::paint(juce::Graphics& g)
     {
         auto smoothed = smoother_.process(levels_.back());
 
+        g.setColour(juce::Colours::black);
         g.drawText(
             juce::String(smoothed, 2),
             bounds,

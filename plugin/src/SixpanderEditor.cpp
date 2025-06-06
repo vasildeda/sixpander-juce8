@@ -78,7 +78,7 @@ void SixpanderEditor::paint(juce::Graphics& g)
 void SixpanderEditor::resized()
 {
     auto r = getLocalBounds();
-    r.removeFromTop(168);
+    r.removeFromTop(172);
 
     auto sliderArea = r.removeFromTop(134);
     sliderArea.removeFromLeft(38);
@@ -86,14 +86,25 @@ void SixpanderEditor::resized()
     attackKnob.setBounds(sliderArea.removeFromLeft(124));
     decayKnob.setBounds(sliderArea.removeFromLeft(124));
     
-    modeComboBox.setBounds(sliderArea.removeFromLeft(248));
+    auto modeArea = sliderArea.removeFromLeft(248);
+    modeArea.removeFromTop(46);
+    modeArea.removeFromBottom(44);
+    modeArea.removeFromLeft(40);
+    modeArea.removeFromRight(40);
+    modeComboBox.setBounds(modeArea);
 
     auto meterArea = r.removeFromTop(r.getHeight());
-    auto meterWidth = meterArea.getWidth() / 4;
+    meterArea.removeFromTop(91);
+    meterArea.removeFromBottom(29);
+    meterArea.removeFromLeft(57);
+    meterArea.removeFromRight(280);
 
-    audioInputMeter.setBounds(meterArea.removeFromLeft(meterWidth));
-    audioSidechainMeter.setBounds(meterArea.removeFromLeft(meterWidth));
-    audioGainMeter.setBounds(meterArea.removeFromLeft(meterWidth));
+    audioInputMeter.setBounds(meterArea.removeFromLeft(85));
+    meterArea.removeFromLeft(41);
+    audioSidechainMeter.setBounds(meterArea.removeFromLeft(85));
+    meterArea.removeFromLeft(41);
+    audioGainMeter.setBounds(meterArea.removeFromLeft(85));
+    meterArea.removeFromLeft(41);
     audioOutputMeter.setBounds(meterArea);
 }
 

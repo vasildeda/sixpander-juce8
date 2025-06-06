@@ -11,7 +11,7 @@ RotaryKnob::RotaryKnob()
     auto knobSvg = juce::File::getCurrentWorkingDirectory()
         .getChildFile("plugin")
         .getChildFile("assets")
-        .getChildFile("simple_knob.svg");
+        .getChildFile("rotary_knob.svg");
     
     if (knobSvg.existsAsFile())
     {
