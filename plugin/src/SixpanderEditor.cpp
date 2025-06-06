@@ -13,14 +13,14 @@ SixpanderEditor::SixpanderEditor(Sixpander& p):
     setSize(800, 600);
 
     // Load the background SVG
-    auto svgFile = juce::File::getCurrentWorkingDirectory()
+    auto backgroundSvg = juce::File::getCurrentWorkingDirectory()
         .getChildFile("plugin")
         .getChildFile("assets")
         .getChildFile("background.svg");
     
-    if (svgFile.existsAsFile())
+    if (backgroundSvg.existsAsFile())
     {
-        backgroundDrawable = juce::Drawable::createFromSVGFile(svgFile);
+        backgroundDrawable = juce::Drawable::createFromSVGFile(backgroundSvg);
     }
 
     addAndMakeVisible(gainSlider);
