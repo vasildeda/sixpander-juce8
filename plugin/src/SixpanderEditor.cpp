@@ -24,7 +24,6 @@ SixpanderEditor::SixpanderEditor(Sixpander& p):
     }
 
     addAndMakeVisible(gainKnob);
-    gainKnob.setSliderStyle(juce::Slider::Rotary);
 
     addAndMakeVisible(modeComboBox);
     modeComboBox.addItem("Max", 1);
