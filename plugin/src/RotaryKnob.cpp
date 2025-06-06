@@ -33,13 +33,6 @@ void RotaryKnob::paint(juce::Graphics& g)
         // Save the current graphics state
         g.saveState();
 
-        // Draw debug crosshair at component center
-        g.setColour(juce::Colours::red);
-        float centerX = getWidth() / 2.0f;
-        float centerY = getHeight() / 2.0f;
-        g.drawLine(centerX - 10, centerY, centerX + 10, centerY, 1.0f);
-        g.drawLine(centerX, centerY - 10, centerX, centerY + 10, 1.0f);
-
         // Calculate the actual path bounds from the SVG
         float pathWidth = 88.0f;   // 106 - 18
         float pathHeight = 97.5f;  // 115.5 - 18
@@ -53,9 +46,20 @@ void RotaryKnob::paint(juce::Graphics& g)
         float centerOffsetX = svgCenterX - 18.0f;  // Distance from left edge to center
         float centerOffsetY = svgCenterY - 18.0f;  // Distance from top edge to center
 
-        // Draw debug rectangle showing actual path bounds
-        g.setColour(juce::Colours::yellow);
-        g.drawRect(centerX - pathWidth/2, centerY - pathHeight/2, pathWidth, pathHeight, 1.0f);
+        float centerX = getWidth() / 2.0f;
+        float centerY = getHeight() / 2.0f;
+
+        if (debug)
+        {
+            // Draw debug crosshair at component center
+            g.setColour(juce::Colours::red);
+            g.drawLine(centerX - 10, centerY, centerX + 10, centerY, 1.0f);
+            g.drawLine(centerX, centerY - 10, centerX, centerY + 10, 1.0f);
+
+            // Draw debug rectangle showing actual path bounds
+            g.setColour(juce::Colours::yellow);
+            g.drawRect(centerX - pathWidth/2, centerY - pathHeight/2, pathWidth, pathHeight, 1.0f);
+        }
 
         // Move to the center of the component
         g.addTransform(juce::AffineTransform::translation(centerX, centerY));
