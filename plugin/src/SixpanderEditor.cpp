@@ -23,14 +23,14 @@ SixpanderEditor::SixpanderEditor(Sixpander& p):
         backgroundDrawable = juce::Drawable::createFromSVGFile(backgroundSvg);
     }
 
-    addAndMakeVisible(gainSlider);
-    gainSlider.setSliderStyle(juce::Slider::Rotary);
+    addAndMakeVisible(gainKnob);
+    gainKnob.setSliderStyle(juce::Slider::Rotary);
 
     addAndMakeVisible(modeComboBox);
     modeComboBox.addItem("Max", 1);
     modeComboBox.addItem("Target", 2);
 
-    gainAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(p.state, "gain", gainSlider);
+    gainAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(p.state, "gain", gainKnob);
     modeAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(p.state, "mode", modeComboBox);
 
     addAndMakeVisible(audioInputMeter);
@@ -72,11 +72,12 @@ void SixpanderEditor::resized()
     r.removeFromTop(200);
 
     auto sliderArea = r.removeFromTop(60);
-    gainSlider.setBounds(
-        sliderArea.removeFromLeft(
-            juce::jmin(180, sliderArea.getWidth() / 2)
-        )
-    );
+    
+    // Position the gain knob
+    auto knobSize = juce::jmin(180, sliderArea.getWidth() / 2);
+    gainKnob.setBounds(sliderArea.removeFromLeft(knobSize));
+    
+    // Position the mode combo box
     modeComboBox.setBounds(sliderArea.removeFromLeft(
         juce::jmin(180, sliderArea.getWidth())
     ));

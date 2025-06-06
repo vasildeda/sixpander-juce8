@@ -2,6 +2,7 @@
 
 #include "Sixpander.h"
 #include "MeterComponent.h"
+#include "RotaryKnob.h"
 #include <juce_gui_basics/juce_gui_basics.h>
 
 //==============================================================================
@@ -21,7 +22,7 @@ private:
 
     Sixpander& audioProcessor;
 
-    juce::Slider gainSlider;
+    RotaryKnob gainKnob;
     juce::ComboBox modeComboBox;
 
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> gainAttachment;    
