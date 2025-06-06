@@ -22,10 +22,12 @@ private:
 
     Sixpander& audioProcessor;
 
-    RotaryKnob gainKnob;
+    RotaryKnob attackKnob;
+    RotaryKnob decayKnob;
     juce::ComboBox modeComboBox;
 
-    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> gainAttachment;    
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> attackAttachment;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> decayAttachment;
     std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> modeAttachment;
 
     MeterComponent audioInputMeter;

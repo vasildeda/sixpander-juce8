@@ -5,9 +5,14 @@ Sixpander::Sixpander()
 : AudioProcessor(BusesProperties().withInput("Input",     juce::AudioChannelSet::stereo())
                                   .withOutput("Output",   juce::AudioChannelSet::stereo())
                                   .withInput("Sidechain", juce::AudioChannelSet::mono())),                                          
-state(*this, nullptr, "PARAMETERS", { std::make_unique<juce::AudioParameterFloat> ("a", "Parameter A", juce::NormalisableRange<float> (-100.0f, 100.0f), 0),
-                                      std::make_unique<juce::AudioParameterInt>   ("gain", "Parameter B", 0, 5, 2),
-                                      std::make_unique<juce::AudioParameterChoice>("mode", "Mode", juce::StringArray { "max", "target" }, 0) })
+state(*this, nullptr, "PARAMETERS", { 
+    std::make_unique<juce::AudioParameterFloat>("attack", "Attack", 
+        juce::NormalisableRange<float>(1.0f, 100.0f, 1.0f), 1.0f),
+    std::make_unique<juce::AudioParameterFloat>("decay", "Decay", 
+        juce::NormalisableRange<float>(1.0f, 100.0f, 1.0f), 1.0f),
+    std::make_unique<juce::AudioParameterChoice>("mode", "Mode", 
+        juce::StringArray { "max", "target" }, 0) 
+})
 {}
 
 Sixpander::~Sixpander()
@@ -41,7 +46,6 @@ void Sixpander::setStateInformation (const void* data, int sizeInBytes)
 
 void Sixpander::prepareToPlay(double sampleRate, int samplesPerBlock)
 {
-    gainSmoother.setDebug(true);
     gainSmoother.setSampleRate(sampleRate);
     gainSmoother.setAttackTime(0.001f);
     gainSmoother.setReleaseTime(0.001f);

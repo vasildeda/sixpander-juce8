@@ -23,13 +23,23 @@ SixpanderEditor::SixpanderEditor(Sixpander& p):
         backgroundDrawable = juce::Drawable::createFromSVGFile(backgroundSvg);
     }
 
-    addAndMakeVisible(gainKnob);
+    addAndMakeVisible(attackKnob);
+    attackKnob.setRange(1.0, 100.0, 1.0);
+    attackKnob.setNumDecimalPlacesToDisplay(0);
+    attackKnob.setTextValueSuffix(" ms");
+
+    addAndMakeVisible(decayKnob);
+    decayKnob.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 80, 20);
+    decayKnob.setRange(1.0, 100.0, 1.0);
+    decayKnob.setNumDecimalPlacesToDisplay(0);
+    decayKnob.setTextValueSuffix(" ms");
 
     addAndMakeVisible(modeComboBox);
     modeComboBox.addItem("Max", 1);
     modeComboBox.addItem("Target", 2);
 
-    gainAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(p.state, "gain", gainKnob);
+    attackAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(p.state, "attack", attackKnob);
+    decayAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(p.state, "decay", decayKnob);
     modeAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(p.state, "mode", modeComboBox);
 
     addAndMakeVisible(audioInputMeter);
@@ -67,21 +77,18 @@ void SixpanderEditor::paint(juce::Graphics& g)
 
 void SixpanderEditor::resized()
 {
-    auto r = getLocalBounds().reduced(8);
-    r.removeFromTop(200);
+    auto r = getLocalBounds();
+    r.removeFromTop(168);
 
-    auto sliderArea = r.removeFromTop(60);
+    auto sliderArea = r.removeFromTop(124);
+    sliderArea.removeFromLeft(38);
     
-    // Position the gain knob
-    auto knobSize = juce::jmin(180, sliderArea.getWidth() / 2);
-    gainKnob.setBounds(sliderArea.removeFromLeft(knobSize));
+    attackKnob.setBounds(sliderArea.removeFromLeft(124));
+    decayKnob.setBounds(sliderArea.removeFromLeft(124));
     
-    // Position the mode combo box
-    modeComboBox.setBounds(sliderArea.removeFromLeft(
-        juce::jmin(180, sliderArea.getWidth())
-    ));
+    modeComboBox.setBounds(sliderArea.removeFromLeft(248));
 
-    auto meterArea = r.removeFromTop(200);
+    auto meterArea = r.removeFromTop(r.getHeight());
     auto meterWidth = meterArea.getWidth() / 4;
 
     audioInputMeter.setBounds(meterArea.removeFromLeft(meterWidth));
