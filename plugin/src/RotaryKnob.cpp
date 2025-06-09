@@ -1,4 +1,5 @@
 #include "../include/RotaryKnob.h"
+#include <juce_core/juce_core.h>
 
 RotaryKnob::RotaryKnob()
 {
@@ -27,8 +28,15 @@ void RotaryKnob::paint(juce::Graphics& g)
 {
     if (knobDrawable_ != nullptr)
     {
-        // Calculate rotation angle based on slider value (0-300 degrees)
-        rotationAngle_ = getValue() / 100.0f * 326.0f;
+        // Calculate rotation angle based on slider value and range
+        auto range = getRange();
+        auto rotationAngle = juce::jmap<double>(
+            getValue(),
+            range.getStart(),
+            range.getEnd(),
+            0.0,
+            326.0
+        );
         
         // Save the current graphics state
         g.saveState();
@@ -66,7 +74,7 @@ void RotaryKnob::paint(juce::Graphics& g)
 
         // Apply rotation around the center of the circle
         g.addTransform(juce::AffineTransform::rotation(
-            juce::degreesToRadians(rotationAngle_),
+            juce::degreesToRadians(rotationAngle),
             centerOffsetX - pathWidth/2,  // X offset from path center
             centerOffsetY - pathHeight/2  // Y offset from path center
         ));

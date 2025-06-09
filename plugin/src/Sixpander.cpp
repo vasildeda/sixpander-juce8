@@ -9,7 +9,7 @@ state(*this, nullptr, "PARAMETERS", {
     std::make_unique<juce::AudioParameterFloat>("attack", "Attack", 
         juce::NormalisableRange<float>(1.0f, 100.0f, 1.0f), 1.0f),
     std::make_unique<juce::AudioParameterFloat>("decay", "Decay", 
-        juce::NormalisableRange<float>(1.0f, 100.0f, 1.0f), 1.0f),
+        juce::NormalisableRange<float>(1.0f, 1000.0f, 1.0f), 1.0f),
     std::make_unique<juce::AudioParameterChoice>("mode", "Mode", 
         juce::StringArray { "max", "target" }, 0) 
 })
@@ -54,6 +54,13 @@ void Sixpander::prepareToPlay(double sampleRate, int samplesPerBlock)
 
 void Sixpander::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuffer&)
 {
+    // Get parameter values from state and convert from milliseconds to seconds
+    float attackTime = *state.getRawParameterValue("attack") / 1000.0f;
+    float decayTime = *state.getRawParameterValue("decay") / 1000.0f;
+    
+    gainSmoother_.setAttackTime(attackTime);
+    gainSmoother_.setReleaseTime(decayTime);
+    
     float inputSumSquares = 0.0f;
     int inputSamples = 0;
 

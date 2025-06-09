@@ -16,8 +16,7 @@ public:
 
 private:
     std::unique_ptr<juce::Drawable> knobDrawable_;
-    float rotationAngle_ = 0.0f;
     bool debug_ = false;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(RotaryKnob)
-}; 
+};

@@ -24,13 +24,26 @@ SixpanderEditor::SixpanderEditor(Sixpander& p):
     }
 
     addAndMakeVisible(attackKnob);
-    attackKnob.setRange(1.0, 100.0, 1.0);
+    if (auto* param = dynamic_cast<juce::AudioParameterFloat*>(p.state.getParameter("attack")))
+    {
+        attackKnob.setRange(
+            param->getNormalisableRange().start, 
+            param->getNormalisableRange().end, 
+            param->getNormalisableRange().interval
+        );
+    }
     attackKnob.setNumDecimalPlacesToDisplay(0);
     attackKnob.setTextValueSuffix(" ms");
 
     addAndMakeVisible(decayKnob);
-    decayKnob.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 80, 20);
-    decayKnob.setRange(1.0, 100.0, 1.0);
+    if (auto* param = dynamic_cast<juce::AudioParameterFloat*>(p.state.getParameter("decay")))
+    {
+        decayKnob.setRange(
+            param->getNormalisableRange().start, 
+            param->getNormalisableRange().end, 
+            param->getNormalisableRange().interval
+        );
+    }
     decayKnob.setNumDecimalPlacesToDisplay(0);
     decayKnob.setTextValueSuffix(" ms");
 

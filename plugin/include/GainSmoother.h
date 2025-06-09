@@ -1,5 +1,7 @@
 #pragma once
 
+#include "MathUtil.h"
+
 #include <cmath>
 #include <iostream>
 
@@ -54,9 +56,8 @@ private:
         float safeReleaseTime = std::max(releaseTime_, minTime);
         float safeSR = std::max(sr_, 1.0f);
 
-        // Reach ~99% of target in given time
-        attackCoeff_  = std::expf(-std::logf(100.0f) / (safeAttackTime  * safeSR));
-        releaseCoeff_ = std::expf(-std::logf(100.0f) / (safeReleaseTime * safeSR));
+        attackCoeff_ = computeAlpha(0.99, attackTime_ * 1000.0, sr_);
+        releaseCoeff_ = computeAlpha(0.99, releaseTime_ * 1000.0, sr_);
 
         if (debug_)
         {
