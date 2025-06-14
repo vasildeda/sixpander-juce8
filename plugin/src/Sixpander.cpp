@@ -13,7 +13,9 @@ state(*this, nullptr, "PARAMETERS", {
     std::make_unique<juce::AudioParameterChoice>("mode", "Mode", 
         juce::StringArray { "max", "target" }, 0) 
 })
-{}
+{
+    gainSmoother_.setDebug(true);
+}
 
 Sixpander::~Sixpander()
 {}

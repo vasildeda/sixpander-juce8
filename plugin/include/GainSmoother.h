@@ -12,20 +12,29 @@ public:
 
     void setSampleRate(double sampleRate)
     {
-        sr_ = static_cast<float>(sampleRate);
-        updateCoefficients();
+        if (sr_ != static_cast<float>(sampleRate))
+        {
+            sr_ = static_cast<float>(sampleRate);
+            updateCoefficients();
+        }
     }
 
     void setAttackTime(float timeInSeconds)
     {
-        attackTime_ = timeInSeconds;
-        updateCoefficients();
+        if (attackTime_ != timeInSeconds)
+        {
+            attackTime_ = timeInSeconds;
+            updateCoefficients();
+        }
     }
 
     void setReleaseTime(float timeInSeconds)
     {
-        releaseTime_ = timeInSeconds;
-        updateCoefficients();
+        if (releaseTime_ != timeInSeconds)
+        {
+            releaseTime_ = timeInSeconds;
+            updateCoefficients();
+        }
     }
 
     void reset(float initialValue = 0.0f)
@@ -36,7 +45,7 @@ public:
     float process(float target)
     {
         const float coeff = (target > current_) ? attackCoeff_ : releaseCoeff_;
-        current_ = coeff * current_ + (1.0f - coeff) * target;
+        current_ = (1.0f - coeff) * current_ + coeff * target;
         if (debug_)
         {
             std::cout << "Target: " << target << ", Current: " << current_ << "                                              \r";
@@ -56,8 +65,8 @@ private:
         float safeReleaseTime = std::max(releaseTime_, minTime);
         float safeSR = std::max(sr_, 1.0f);
 
-        attackCoeff_ = computeAlpha(0.99, attackTime_ * 1000.0, sr_);
-        releaseCoeff_ = computeAlpha(0.99, releaseTime_ * 1000.0, sr_);
+        attackCoeff_ = computeAlpha(0.75, attackTime_, sr_);
+        releaseCoeff_ = computeAlpha(0.75, releaseTime_, sr_);
 
         if (debug_)
         {
